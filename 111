@@ -1,0 +1,24 @@
+python
+ import pychromecast
+ import time
+ from os import listdir
+ from os.path import isfile, join
+ 
+ # 音乐目录
+ music_dir = "/home/music"
+ 
+ # 扫描网络中的Google Home Mini设备   
+ chromecasts = pychromecast.get_chromecasts()
+ 
+ # 选择其中一个设备并连接
+ cast = next(cc for cc in chromecasts if cc.name == "Google Home Mini")
+ cast.wait() # 等待设备就绪
+ 
+ # 获取音乐目录下的所有音乐文件
+ files = [f for f in listdir(music_dir) if isfile(join(music_dir, f))]
+ 
+ # 逐个向Google Home Mini推送音乐并播放 
+ for f in files:
+     print(f"Playing {f}...")
+     cast.play_media(join(music_dir, f), "audio/mp3")
+     time.sleep(5) # 播放5秒     
